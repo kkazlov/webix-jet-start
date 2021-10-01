@@ -6,6 +6,24 @@ export default class DataCountries extends JetView {
 		const rules = {
 			Name: webix.rules.isNotEmpty,
 		};
+		
+		const saveBtn = { 
+			view:"button", 
+			value:"Add new", 
+			css:"webix_primary", 
+			click: function() {
+				const form = $$("formCountry");
+				
+				if (form.validate()) {
+					const item = form.getValues();
+					$$("tableCountry").add(item);
+					
+					form.clear();
+					webix.message("New record was added");
+				} 
+				
+			} 
+		};
 
 		const datatable = {
 			view:"datatable",
@@ -54,23 +72,7 @@ export default class DataCountries extends JetView {
 
 			elements:[
 				{ view:"text", label:"Name", name: "Name" },
-				{ 
-					view:"button", 
-					value:"Add new", 
-					css:"webix_primary", 
-					click: function() {
-						const form = $$("formCountry");
-						
-						if (form.validate()) {
-							const item = form.getValues();
-							$$("tableCountry").add(item);
-							
-							form.clear();
-							webix.message("New record was added");
-						} 
-						
-					} 
-				},
+				saveBtn,
 				{}
 			]
 		};

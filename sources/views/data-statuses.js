@@ -9,6 +9,24 @@ export default class DataStatuses extends JetView {
 			Icon: webix.rules.isNotEmpty,
 		};
 
+		const saveBtn = { 
+			view:"button", 
+			value:"Add new", 
+			css:"webix_primary", 
+			click: function() {
+				const form = $$("formStatus");
+				
+				if (form.validate()) {
+					const item = form.getValues();
+					$$("tableStatus").add(item);
+					
+					form.clear();
+					webix.message("New record was added");
+				} 
+				
+			} 
+		};
+
 		const datatable = {
 			view:"datatable",
 			id: "tableStatus",
@@ -58,23 +76,7 @@ export default class DataStatuses extends JetView {
 			elements:[
 				{ view:"text", label:"Name", name: "Name" },
 				{ view:"text", label:"Icon", name: "Icon" },
-				{ 
-					view:"button", 
-					value:"Add new", 
-					css:"webix_primary", 
-					click: function() {
-						const form = $$("formStatus");
-						
-						if (form.validate()) {
-							const item = form.getValues();
-							$$("tableStatus").add(item);
-							
-							form.clear();
-							webix.message("New record was added");
-						} 
-						
-					} 
-				},
+				saveBtn,
 				{}
 			]
 		};

@@ -1,3 +1,15 @@
-export default {
-	template:"settings page", css:"webix_shadow_medium app_start"
-};
+import {JetView} from "webix-jet";
+
+export default class Settings extends JetView {
+	config() {
+		return {
+			view:"segmented", 
+			value: "RU",
+			options:[
+				{ id:"RU", value:"RU" }, 
+				{ id:"EN", value:"EN" }, 
+			]
+			
+		};
+	}
+}
