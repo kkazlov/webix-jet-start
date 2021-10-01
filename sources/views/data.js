@@ -20,7 +20,11 @@ export default class DataView extends JetView{
 						{id:"dataStatuses", value:"Statuses"}, 
 					]
 				},
-				{ cells:[dataCountries, dataStatuses] }
+				{ cells:[
+					{$subview:dataCountries, id:"dataCountries"}, 
+					{$subview:dataStatuses, id:"dataStatuses"}
+				] 
+				}
 			]
 		};
 	}

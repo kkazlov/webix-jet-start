@@ -18,7 +18,6 @@ const statusesConfig = {
 		Icon: webix.rules.isNotEmpty,
 	},
 	dataBase: statuses,
-	multiID: "dataStatuses"
 };
 
 export {statusesConfig, statuses};

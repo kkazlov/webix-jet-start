@@ -12,7 +12,6 @@ const countriesConfig = {
 	formElements: [{ view:"text", label:"Name", name: "Name" }],
 	rules: {Name: webix.rules.isNotEmpty},
 	dataBase: countries,
-	multiID: "dataCountries"
 };
 
 export {countriesConfig, countries};

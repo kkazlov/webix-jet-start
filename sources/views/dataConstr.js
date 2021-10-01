@@ -1,14 +1,14 @@
 import { JetView } from "webix-jet";
 
 export default class DataConstr extends JetView {
-	constructor(app, {tableColumns, formElements, rules, dataBase, multiID}) {
+	constructor(app, {tableColumns, formElements, rules, dataBase}) {
 		super(app);
 
 		this._tableColumns = tableColumns;
 		this._formElements = formElements;
 		this._rules = rules;
 		this._dataBase = dataBase;
-		this._multiID = multiID;
+		
 	}
 
 	config() {
@@ -78,7 +78,6 @@ export default class DataConstr extends JetView {
 		};
 
 		const ui = {
-			id:this._multiID,
 			cols:[ datatable, form, ]
 		};
 
