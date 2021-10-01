@@ -19,7 +19,8 @@ export default class Contacts extends JetView {
 						{cols:[
 							{ view:"button", value:"Login", css:"webix_primary" },
 							{ view:"button", value:"Cancel" }
-						]}
+						]},
+						{}
 					]
 				}
 			]

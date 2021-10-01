@@ -1,11 +1,25 @@
 import {JetView} from "webix-jet";
-import {data} from "models/records";
+import DataCountries from "./data-countries";
+import DataStatuses from "./data-statuses";
+
 
 export default class DataView extends JetView{
 	config(){
-		return { view:"datatable", autoConfig:true, css:"webix_shadow_medium" };
+		return { 
+			margin: 10,
+			rows:[
+				{
+					view:"tabbar", 
+					value:"dataCountries",
+					multiview: true,
+					options: [
+						{id:"dataCountries", value:"Countries"},
+						{id:"dataStatuses", value:"Statuses"},
+					]
+				},
+				{ cells:[ DataCountries, DataStatuses ] }
+			]
+		};
 	}
-	init(view){
-		view.parse(data);
-	}
+	
 }
