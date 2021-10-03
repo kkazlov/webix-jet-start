@@ -1,4 +1,5 @@
 import { JetView } from "webix-jet";
+import { contactsCollection } from "../models/dataCollections";
 
 export default class ContactsForm extends JetView {
 	config() {
@@ -16,5 +17,10 @@ export default class ContactsForm extends JetView {
 				{},
 			],
 		};
+	}
+
+	urlChange(view) {
+		const contactsID = this.getParam("id");
+		view.setValues(contactsCollection.getItem(contactsID));
 	}
 }

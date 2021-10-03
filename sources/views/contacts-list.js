@@ -1,5 +1,5 @@
 import { JetView } from "webix-jet";
-import { contacts } from "../models/contacts";
+import { contactsCollection } from "../models/dataCollections";
 
 export default class ContactsList extends JetView {
 	config() {
@@ -7,7 +7,20 @@ export default class ContactsList extends JetView {
 			view: "list",
 			template: "#id#. #Name#, email: #Email#",
 			select: true,
-			data: contacts,
+			data: contactsCollection,
 		};
 	}
+
+	init(view) {
+		let initSelect = this.getParam("id") || 1;
+
+		view.select(initSelect);
+		this.setParam("id", initSelect, true);
+
+		view.attachEvent("onAfterSelect", (id) => {
+			this.show(`contacts?id=${id}`);
+		});
+	}
+	
+
 }
