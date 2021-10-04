@@ -1,6 +1,6 @@
 import {JetView} from "webix-jet";
-import { statusesConfig } from "../models/statuses";
-import { countriesConfig } from "../models/countries";
+import { countriesConfig } from "../models/dataConfig";
+import { statusesConfig } from "../models/dataConfig";
 import DataConstr from "./dataConstr";
 
 

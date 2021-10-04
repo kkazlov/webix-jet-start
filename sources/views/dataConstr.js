@@ -1,4 +1,5 @@
 import { JetView } from "webix-jet";
+import { contactsCollection } from "../models/dataCollections"; 
 
 export default class DataConstr extends JetView {
 	constructor(app, {tableColumns, formElements, rules, dataBase}) {
@@ -21,7 +22,7 @@ export default class DataConstr extends JetView {
 				
 				if (form.validate()) {
 					const item = form.getValues();
-					this.$$("table").add(item);
+					this._dataBase.add(item);
 					
 					form.clear();
 					webix.message("New record was added");
@@ -51,7 +52,32 @@ export default class DataConstr extends JetView {
 							text: "Do you want delete this record?",
 						})
 						.then(() => {
-							this.remove(id);
+							const collection = this.$scope._dataBase;
+							const collectionName = collection.config.id;
+							collection.remove(id);
+							
+							if (collectionName === "countriesCollection") {
+								contactsCollection.data.each((obj) => {
+									if (obj.Country == id) {
+										const contactID = obj.id;
+										contactsCollection.updateItem(contactID, {Country: "empty"});
+									}
+								});
+							}
+
+							if (collectionName === "statusesCollection") {
+								contactsCollection.data.each((obj) => {
+									if (obj.Status == id) {
+										const contactID = obj.id;
+										contactsCollection.updateItem(contactID, {Status: "empty"});
+									}
+								});
+							}
+							
+							
+
+							
+							
 						});
 				},
 			}

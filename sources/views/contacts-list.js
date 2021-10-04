@@ -1,7 +1,8 @@
 import { JetView } from "webix-jet";
 import { contactsCollection } from "../models/dataCollections";
-import { countries } from "../models/countries";
-import { statuses } from "../models/statuses";
+import { countriesCollection } from "../models/dataCollections";
+import { statusesCollection } from "../models/dataCollections";
+
 import "../styles/contacts.css";
 
 export default class ContactsList extends JetView {
@@ -43,13 +44,14 @@ export default class ContactsList extends JetView {
 					css: "webix_primary",
 					click: () => {
 						const list = this.$$("contactList");
-						const rndStatus = randomInteger(statuses.length);
-						const rndCountry = randomInteger(countries.length);
+						const rndStatus = randomInteger(statusesCollection.count());
+						const rndCountry = randomInteger(countriesCollection.count());
+						
 						contactsCollection.add({
 							Name: "Ivan Petrov",
 							Email: "Petrov@gmail.com",
-							Country: rndCountry,
-							Status: rndStatus,
+							Country: countriesCollection.data.order[rndCountry - 1] || "empty",
+							Status: statusesCollection.data.order[rndStatus - 1] || "empty",
 						});
 						list.select(list.getLastId());
 

@@ -1,7 +1,7 @@
 import { JetView } from "webix-jet";
 import { contactsCollection } from "../models/dataCollections";
-import { countries } from "../models/countries";
-import { statuses } from "../models/statuses";
+import { statusesCollection } from "../models/dataCollections";
+import { countriesCollection } from "../models/dataCollections";
 
 export default class ContactsForm extends JetView {
 	config() {
@@ -20,7 +20,7 @@ export default class ContactsForm extends JetView {
 				},
 				body: {
 					template: "#Name#",
-					data: countries,
+					data: countriesCollection,
 				},
 			},
 		};
@@ -40,7 +40,7 @@ export default class ContactsForm extends JetView {
 				},
 				body: {
 					template: "#Name#",
-					data: statuses,
+					data: statusesCollection,
 				},
 			},
 		};
@@ -56,6 +56,7 @@ export default class ContactsForm extends JetView {
 
 				if (validation) {
 					contactsCollection.updateItem(contactsID, form.getValues());
+					
 					webix.message("Record was updated");
 				}
 			},
