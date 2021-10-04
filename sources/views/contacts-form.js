@@ -8,7 +8,16 @@ export default class ContactsForm extends JetView {
 		const comboCountries = {
 			view: "combo",
 			label: "Countries",
+			name: "Country",
 			options: {
+				filter: function (item, value) {
+					return (
+						item.Name
+							.toString()
+							.toLowerCase()
+							.indexOf(value.toLowerCase()) !== -1
+					);
+				},
 				body: {
 					template: "#Name#",
 					data: countries,
@@ -18,8 +27,17 @@ export default class ContactsForm extends JetView {
 
 		const comboStatuses = {
 			view: "combo",
+			name: "Status",
 			label: "Statuses",
 			options: {
+				filter: function (item, value) {
+					return (
+						item.Name
+							.toString()
+							.toLowerCase()
+							.indexOf(value.toLowerCase()) !== -1
+					);
+				},
 				body: {
 					template: "#Name#",
 					data: statuses,
@@ -27,19 +45,46 @@ export default class ContactsForm extends JetView {
 			},
 		};
 
+		const saveBtn = {
+			view: "button",
+			value: "Save",
+			css: "webix_primary",
+			click: () => {
+				const form = this.$$("contactsForm");
+				const validation = form.validate();
+				const contactsID = this.getParam("id");
+
+				if (validation) {
+					contactsCollection.updateItem(contactsID, form.getValues());
+					webix.message("Record was updated");
+				}
+			},
+		};
+
+
 		return {
 			view: "form",
+			localId: "contactsForm",
+			rules: {
+				Name: webix.rules.isNotEmpty,
+				Email: webix.rules.isNotEmpty,
+				Status: webix.rules.isNotEmpty,
+				Country: webix.rules.isNotEmpty,
+			},
+			elementsConfig: {
+				invalidMessage: "Enter the correct value!",
+				on: {
+					onFocus: () => {
+						this.$$("contactsForm").clearValidation();
+					},
+				},
+			},
 			elements: [
 				{ view: "text", label: "Name", name: "Name" },
 				{ view: "text", label: "Email", name: "Email" },
 				comboCountries,
 				comboStatuses,
-				{
-					cols: [
-						{ view: "button", value: "Save", css: "webix_primary" },
-						{ view: "button", value: "Cancel" },
-					],
-				},
+				saveBtn,
 				{},
 			],
 		};
