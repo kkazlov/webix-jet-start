@@ -6,58 +6,69 @@ import { statusesCollection } from "../models/dataCollections";
 import "../styles/contacts.css";
 
 export default class ContactsList extends JetView {
+	
 	config() {
+		const _ = this.app.getService("locale")._;
+		
 		const randomInteger = (max) => {
 			let rand = Math.random() * max;
-			return Math.floor(rand) + 1;
+			return Math.floor(rand);
 		};
-		return {
-			rows: [
-				{
-					view: "list",
-					localId: "contactList",
-					template: function ({
-						Name,
-						countryName,
-						Email,
-						statusName,
-					}) {
-						return `
-							<div class='contacts-list__item'>
-								${Name} from ${countryName} | Email: ${Email} | Status: ${statusName}
-								<span class='webix_icon wxi-close removeBtn'></span>
-							</div>
-						`;
-					},
-					select: true,
-					data: contactsCollection,
-					onClick: {
-						removeBtn: function (e, id) {
-							contactsCollection.remove(id);
-							this.$scope.refreshList();
-						},
-					},
-				},
-				{
-					view: "button",
-					value: "Add new",
-					css: "webix_primary",
-					click: () => {
-						const list = this.$$("contactList");
-						const rndStatus = randomInteger(statusesCollection.count());
-						const rndCountry = randomInteger(countriesCollection.count());
-						
-						contactsCollection.add({
-							Name: "Ivan Petrov",
-							Email: "Petrov@gmail.com",
-							Country: countriesCollection.data.order[rndCountry - 1] || "empty",
-							Status: statusesCollection.data.order[rndStatus - 1] || "empty",
-						});
-						list.select(list.getLastId());
 
-					},
+		const list = {
+			view: "list",
+			localId: "contactList",
+			template: function ({
+				Name,
+				countryName,
+				Email,
+				statusName,
+			}) {
+				return `
+					<div class='contacts-list__item'>
+						${Name} from ${countryName} | Email: ${Email} | Status: ${statusName}
+						<span class='webix_icon wxi-close removeBtn'></span>
+					</div>
+				`;
+			},
+			select: true,
+			data: contactsCollection,
+			onClick: {
+				removeBtn: function (e, id) {
+					contactsCollection.remove(id);
+					this.$scope.refreshList();
 				},
-			],
+			},
+		};
+
+		const addBtn = {
+			view: "button",
+			value: _("Add new"),
+			css: "webix_primary",
+			click: () => {
+				const list = this.$$("contactList");
+				const rndStatus = randomInteger(
+					statusesCollection.count()
+				);
+				const rndCountry = randomInteger(
+					countriesCollection.count()
+				);
+
+				contactsCollection.add({
+					Name: "Ivan Petrov",
+					Email: "Petrov@gmail.com",
+					Country:
+						countriesCollection.data.order[rndCountry] || "empty",
+					Status:
+						statusesCollection.data.order[rndStatus] ||
+						"empty",
+				});
+				list.select(list.getLastId());
+			},
+		};
+		
+		return {
+			rows: [ list,addBtn ]
 		};
 	}
 
@@ -80,7 +91,7 @@ export default class ContactsList extends JetView {
 	refreshList() {
 		const list = this.$$("contactList");
 		const firstID = list.getFirstId();
-		
+
 		if (firstID) {
 			list.select(firstID);
 		} else {
@@ -88,6 +99,5 @@ export default class ContactsList extends JetView {
 			this.show("contacts");
 			$$("mainForm").clear();
 		}
-		
 	}
 }

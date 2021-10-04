@@ -5,6 +5,8 @@ import { countriesCollection } from "../models/dataCollections";
 
 export default class ContactsForm extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const comboCountries = {
 			view: "combo",
 			label: "Countries",
@@ -47,7 +49,7 @@ export default class ContactsForm extends JetView {
 
 		const saveBtn = {
 			view: "button",
-			value: "Save",
+			value: _("Save"),
 			css: "webix_primary",
 			click: () => {
 				const form = this.$$("contactsForm");
