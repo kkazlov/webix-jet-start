@@ -64,6 +64,7 @@ export default class ContactsForm extends JetView {
 
 		return {
 			view: "form",
+			id: "mainForm",
 			localId: "contactsForm",
 			rules: {
 				Name: webix.rules.isNotEmpty,
@@ -91,7 +92,11 @@ export default class ContactsForm extends JetView {
 	}
 
 	urlChange(view) {
+
 		const contactsID = this.getParam("id");
-		view.setValues(contactsCollection.getItem(contactsID));
+		if (contactsID) {
+			view.setValues(contactsCollection.getItem(contactsID));
+		}
+		
 	}
 }

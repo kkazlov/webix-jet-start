@@ -2,6 +2,8 @@ import { JetView } from "webix-jet";
 
 export default class Settings extends JetView {
 	config() {
+
+		const value = this.app.getService("locale").getLang();
 		
 		return {
 			rows: [
@@ -13,9 +15,8 @@ export default class Settings extends JetView {
 						{ id: "en", value: "EN" },
 						{ id: "ru", value: "RU" },
 					],
-					on: {
-						onAfterTabClick: (id) => this.toggleLanguage(id)
-					},
+					value,
+					click: () => this.toggleLanguage()
 					
 				},
 				{},
@@ -23,8 +24,9 @@ export default class Settings extends JetView {
 		};
 	}
 
-	toggleLanguage(id) {
+	toggleLanguage() {
 		const langs = this.app.getService("locale");
-		langs.setLang(id);
+		const value = this.getRoot().queryView({name: "lang"}).getValue();
+		langs.setLang(value);
 	}
 }

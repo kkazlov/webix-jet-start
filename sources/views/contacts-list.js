@@ -42,6 +42,7 @@ export default class ContactsList extends JetView {
 					value: "Add new",
 					css: "webix_primary",
 					click: () => {
+						const list = this.$$("contactList");
 						const rndStatus = randomInteger(statuses.length);
 						const rndCountry = randomInteger(countries.length);
 						contactsCollection.add({
@@ -50,6 +51,8 @@ export default class ContactsList extends JetView {
 							Country: rndCountry,
 							Status: rndStatus,
 						});
+						list.select(list.getLastId());
+
 					},
 				},
 			],
@@ -75,6 +78,14 @@ export default class ContactsList extends JetView {
 	refreshList() {
 		const list = this.$$("contactList");
 		const firstID = list.getFirstId();
-		list.select(firstID);
+		
+		if (firstID) {
+			list.select(firstID);
+		} else {
+			list.unselectAll();
+			this.show("contacts");
+			$$("mainForm").clear();
+		}
+		
 	}
 }
