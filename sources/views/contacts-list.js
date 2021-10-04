@@ -59,6 +59,10 @@ export default class ContactsList extends JetView {
 	init() {
 		const list = this.$$("contactList");
 		let initSelect = this.getParam("id") || list.getFirstId();
+		const checkID = +contactsCollection.data.getIndexById(initSelect);
+		if (checkID === -1) {
+			initSelect = 1;
+		}
 
 		list.select(initSelect);
 		this.setParam("id", initSelect, true);
