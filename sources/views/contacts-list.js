@@ -34,8 +34,13 @@ export default class ContactsList extends JetView {
 			select: true,
 			onClick: {
 				removeBtn: function (e, id) {
+					const selectedID = this.getSelectedId();
+					
 					contactsCollection.remove(id);
-					this.$scope.refreshList();
+					if (selectedID === id) {
+						this.$scope.refreshList();
+					}
+					
 				},
 			},
 		};
@@ -52,9 +57,8 @@ export default class ContactsList extends JetView {
 				contactsCollection.add({
 					Name: "Ivan Petrov",
 					Email: "Petrov@gmail.com",
-					Country:
-						countriesCollection.data.order[rndCountry] || "empty",
-					Status: statusesCollection.data.order[rndStatus] || "empty",
+					Country: countriesCollection.data.order[rndCountry],
+					Status: statusesCollection.data.order[rndStatus],
 				});
 				list.select(list.getLastId());
 			},
