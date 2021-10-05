@@ -2,50 +2,23 @@ import { JetView } from "webix-jet";
 import { contactsCollection } from "../models/dataCollections";
 import { statusesCollection } from "../models/dataCollections";
 import { countriesCollection } from "../models/dataCollections";
+import ComboConstr from "./comboConstr";
 
 export default class ContactsForm extends JetView {
 	config() {
 		const _ = this.app.getService("locale")._;
 
-		const comboCountries = {
-			view: "combo",
-			label: "Countries",
+		const comboCountries = new ComboConstr(this.app, {
+			dataBase: countriesCollection,
 			name: "Country",
-			options: {
-				filter: function (item, value) {
-					return (
-						item.Name
-							.toString()
-							.toLowerCase()
-							.indexOf(value.toLowerCase()) !== -1
-					);
-				},
-				body: {
-					template: "#Name#",
-					data: countriesCollection,
-				},
-			},
-		};
+			label: "Countries",
+		});
 
-		const comboStatuses = {
-			view: "combo",
+		const comboStatuses = new ComboConstr(this.app, {
+			dataBase: statusesCollection,
 			name: "Status",
 			label: "Statuses",
-			options: {
-				filter: function (item, value) {
-					return (
-						item.Name
-							.toString()
-							.toLowerCase()
-							.indexOf(value.toLowerCase()) !== -1
-					);
-				},
-				body: {
-					template: "#Name#",
-					data: statusesCollection,
-				},
-			},
-		};
+		});
 
 		const saveBtn = {
 			view: "button",
@@ -58,12 +31,11 @@ export default class ContactsForm extends JetView {
 
 				if (validation) {
 					contactsCollection.updateItem(contactsID, form.getValues());
-					
+
 					webix.message("Record was updated");
 				}
 			},
 		};
-
 
 		return {
 			view: "form",
@@ -94,7 +66,6 @@ export default class ContactsForm extends JetView {
 		};
 	}
 
-	
 	urlChange(view) {
 		const contactsID = this.getParam("id");
 		if (contactsID) {
@@ -104,6 +75,5 @@ export default class ContactsForm extends JetView {
 			view.clear();
 			view.disable();
 		}
-		
 	}
 }
