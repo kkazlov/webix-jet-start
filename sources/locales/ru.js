@@ -10,5 +10,5 @@ export default {
 	"Email": "Почта",
 	"Icon": "Иконка",
 	"App": "Приложение",
-	
+	"ID": "ID",
 };
