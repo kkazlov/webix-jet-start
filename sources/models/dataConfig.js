@@ -1,6 +1,7 @@
 import { countriesCollection } from "./dataCollections";
 import { statusesCollection } from "./dataCollections";
 
+
 const countriesConfig = {
 	tableColumns:[
 		{ id:"id", header:"ID", fillspace: 1},

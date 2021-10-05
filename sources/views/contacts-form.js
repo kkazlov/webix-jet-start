@@ -11,13 +11,13 @@ export default class ContactsForm extends JetView {
 		const comboCountries = new ComboConstr(this.app, {
 			dataBase: countriesCollection,
 			name: "Country",
-			label: "Countries",
+			label: _("Countries"),
 		});
 
 		const comboStatuses = new ComboConstr(this.app, {
 			dataBase: statusesCollection,
 			name: "Status",
-			label: "Statuses",
+			label: _("Statuses"),
 		});
 
 		const saveBtn = {
@@ -56,8 +56,8 @@ export default class ContactsForm extends JetView {
 				},
 			},
 			elements: [
-				{ view: "text", label: "Name", name: "Name" },
-				{ view: "text", label: "Email", name: "Email" },
+				{ view: "text", label: _("Name"), name: "Name" },
+				{ view: "text", label: _("Email"), name: "Email" },
 				comboCountries,
 				comboStatuses,
 				saveBtn,

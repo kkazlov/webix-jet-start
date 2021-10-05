@@ -6,4 +6,9 @@ export default {
 	"Save": "Сохранить",
 	"Countries": "Страны",
 	"Statuses": "Статусы",
+	"Name": "Имя",
+	"Email": "Почта",
+	"Icon": "Иконка",
+	"App": "Приложение",
+	
 };

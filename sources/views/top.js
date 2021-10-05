@@ -3,12 +3,10 @@ import { JetView, plugins } from "webix-jet";
 export default class TopView extends JetView {
 	config() {
 		const _ = this.app.getService("locale")._;
-		const lang = this.app.getService("locale").getLang();
-		
 
 		const header = {
 			type: "header",
-			template: this.app.config.name,
+			template: `${_("App")}`,
 			css: "webix_header app_header",
 		};
 
@@ -26,12 +24,9 @@ export default class TopView extends JetView {
 				{ value: "Settings", id: "settings", icon: "wxi-pencil" },
 			],
 			template: (obj) => {
-				if(lang==="en") {
-					return `<span class='webix_icon #icon#'></span> ${obj.value} `;
-				} else {
-					return `<span class='webix_icon #icon#'></span> ${_(obj.value)} `;
-				}
-				
+				return `
+					<span class='webix_icon #icon#'></span> ${_(obj.value)} 
+				`;
 			},
 		};
 

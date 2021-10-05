@@ -12,6 +12,14 @@ export default class DataConstr extends JetView {
 
 	config() {
 		const _ = this.app.getService("locale")._;
+
+		const localeTableColumns = this._tableColumns.map((item) => {
+			return {...item, header:_(item.header)};
+		});
+		const localeFormElements = this._formElements.map((item) => {
+			return {...item, label:_(item.label)};
+		});
+
 		const saveBtn = {
 			view: "button",
 			value: _("Add new"),
@@ -36,7 +44,7 @@ export default class DataConstr extends JetView {
 			rules: this._rules,
 
 			columns: [
-				...this._tableColumns,
+				...localeTableColumns,
 				{
 					id: "del",
 					header: "",
@@ -72,7 +80,7 @@ export default class DataConstr extends JetView {
 				},
 			},
 
-			elements: [...this._formElements, saveBtn, {}],
+			elements: [...localeFormElements, saveBtn, {}],
 		};
 
 		const ui = {
