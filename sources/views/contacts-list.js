@@ -6,10 +6,9 @@ import { statusesCollection } from "../models/dataCollections";
 import "../styles/contacts.css";
 
 export default class ContactsList extends JetView {
-	
 	config() {
 		const _ = this.app.getService("locale")._;
-		
+
 		const randomInteger = (max) => {
 			let rand = Math.random() * max;
 			return Math.floor(rand);
@@ -18,12 +17,13 @@ export default class ContactsList extends JetView {
 		const list = {
 			view: "list",
 			localId: "contactList",
-			template: function ({
-				Name,
-				countryName,
-				Email,
-				statusName,
-			}) {
+			template: function ({ Name, Country, Email, Status }) {
+				const countryObj = countriesCollection.getItem(Country);
+				const statusObj = statusesCollection.getItem(Status);
+
+				const countryName = countryObj ? countryObj.Name : "no country";
+				const statusName = statusObj ? statusObj.Name : "no status";
+
 				return `
 					<div class='contacts-list__item'>
 						${Name} from ${countryName} | Email: ${Email} | Status: ${statusName}
@@ -38,7 +38,6 @@ export default class ContactsList extends JetView {
 					this.$scope.refreshList();
 				},
 			},
-			
 		};
 
 		const addBtn = {
@@ -47,52 +46,41 @@ export default class ContactsList extends JetView {
 			css: "webix_primary",
 			click: () => {
 				const list = this.$$("contactList");
-				const rndStatus = randomInteger(
-					statusesCollection.count()
-				);
-				const rndCountry = randomInteger(
-					countriesCollection.count()
-				);
+				const rndStatus = randomInteger(statusesCollection.count());
+				const rndCountry = randomInteger(countriesCollection.count());
 
 				contactsCollection.add({
 					Name: "Ivan Petrov",
 					Email: "Petrov@gmail.com",
 					Country:
 						countriesCollection.data.order[rndCountry] || "empty",
-					Status:
-						statusesCollection.data.order[rndStatus] ||
-						"empty",
+					Status: statusesCollection.data.order[rndStatus] || "empty",
 				});
 				list.select(list.getLastId());
 			},
 		};
-		
-		return {
-			rows: [ list,addBtn ]
-		};
+
+		return { rows: [list, addBtn] };
 	}
 
 	init() {
 		const list = this.$$("contactList");
-		list.parse(contactsCollection);
+		list.sync(contactsCollection);
 
 		let initSelect = this.getParam("id") || list.getFirstId();
-		const checkID = +contactsCollection.data.getIndexById(initSelect);
 
+		const checkID = +contactsCollection.data.getIndexById(initSelect);
 		if (checkID === -1) {
 			initSelect = list.getFirstId();
 		}
 
 		this.setParam("id", initSelect, true);
 
-
 		list.attachEvent("onAfterSelect", (id) => {
 			this.show(`contacts?id=${id}`);
 		});
 
 		list.select(initSelect);
-
-		
 	}
 
 	refreshList() {
