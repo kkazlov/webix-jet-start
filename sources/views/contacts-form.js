@@ -67,13 +67,16 @@ export default class ContactsForm extends JetView {
 	}
 
 	urlChange(view) {
-		const contactsID = this.getParam("id");
-		if (contactsID) {
-			view.setValues(contactsCollection.getItem(contactsID));
-			view.enable();
-		} else {
-			view.clear();
-			view.disable();
-		}
+		contactsCollection.waitData.then(() => {
+			const contactsID = this.getParam("id");
+			if (contactsID) {
+				view.setValues(contactsCollection.getItem(contactsID));
+				view.enable();
+			} else {
+				view.clear();
+				view.disable();
+			}
+		});
+
 	}
 }

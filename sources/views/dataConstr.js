@@ -29,6 +29,7 @@ export default class DataConstr extends JetView {
 
 				if (form.validate()) {
 					const item = form.getValues();
+					
 					this._dataBase.add(item);
 
 					form.clear();
