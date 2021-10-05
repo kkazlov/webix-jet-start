@@ -32,13 +32,13 @@ export default class ContactsList extends JetView {
 				`;
 			},
 			select: true,
-			data: contactsCollection,
 			onClick: {
 				removeBtn: function (e, id) {
 					contactsCollection.remove(id);
 					this.$scope.refreshList();
 				},
 			},
+			
 		};
 
 		const addBtn = {
@@ -74,18 +74,25 @@ export default class ContactsList extends JetView {
 
 	init() {
 		const list = this.$$("contactList");
+		list.parse(contactsCollection);
+
 		let initSelect = this.getParam("id") || list.getFirstId();
 		const checkID = +contactsCollection.data.getIndexById(initSelect);
+
 		if (checkID === -1) {
 			initSelect = list.getFirstId();
 		}
 
-		list.select(initSelect);
 		this.setParam("id", initSelect, true);
+
 
 		list.attachEvent("onAfterSelect", (id) => {
 			this.show(`contacts?id=${id}`);
 		});
+
+		list.select(initSelect);
+
+		
 	}
 
 	refreshList() {
@@ -95,9 +102,7 @@ export default class ContactsList extends JetView {
 		if (firstID) {
 			list.select(firstID);
 		} else {
-			list.unselectAll();
 			this.show("contacts");
-			$$("mainForm").clear();
 		}
 	}
 }
