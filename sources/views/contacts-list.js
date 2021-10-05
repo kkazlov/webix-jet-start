@@ -35,12 +35,11 @@ export default class ContactsList extends JetView {
 			onClick: {
 				removeBtn: function (e, id) {
 					const selectedID = this.getSelectedId();
-					
+
 					contactsCollection.remove(id);
 					if (selectedID === id) {
 						this.$scope.refreshList();
 					}
-					
 				},
 			},
 		};
@@ -54,13 +53,18 @@ export default class ContactsList extends JetView {
 				const rndStatus = randomInteger(statusesCollection.count());
 				const rndCountry = randomInteger(countriesCollection.count());
 
-				contactsCollection.add({
-					Name: "Ivan Petrov",
-					Email: "Petrov@gmail.com",
-					Country: countriesCollection.data.order[rndCountry],
-					Status: statusesCollection.data.order[rndStatus],
-				});
-				list.select(list.getLastId());
+				contactsCollection
+					.waitSave(() => {
+						contactsCollection.add({
+							Name: "Ivan Petrov",
+							Email: "Petrov@gmail.com",
+							Country: countriesCollection.data.order[rndCountry],
+							Status: statusesCollection.data.order[rndStatus],
+						});
+					})
+					.then(() => {
+						list.select(list.getLastId());
+					});
 			},
 		};
 
@@ -71,20 +75,21 @@ export default class ContactsList extends JetView {
 		const list = this.$$("contactList");
 		list.sync(contactsCollection);
 
-		let initSelect = this.getParam("id") || list.getFirstId();
+		contactsCollection.waitData.then(() => {
+			let initSelect = this.getParam("id") || list.getFirstId();
+			const checkID = +contactsCollection.data.getIndexById(initSelect);
+			if (checkID === -1) {
+				initSelect = list.getFirstId();
+			}
 
-		const checkID = +contactsCollection.data.getIndexById(initSelect);
-		if (checkID === -1) {
-			initSelect = list.getFirstId();
-		}
+			this.setParam("id", initSelect, true);
 
-		this.setParam("id", initSelect, true);
+			list.attachEvent("onAfterSelect", (id) => {
+				this.show(`contacts?id=${id}`);
+			});
 
-		list.attachEvent("onAfterSelect", (id) => {
-			this.show(`contacts?id=${id}`);
+			list.select(initSelect);
 		});
-
-		list.select(initSelect);
 	}
 
 	refreshList() {
