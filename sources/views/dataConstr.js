@@ -1,48 +1,58 @@
 import { JetView } from "webix-jet";
 
 export default class DataConstr extends JetView {
-	constructor(app, {tableColumns, formElements, rules, dataBase}) {
+	constructor(app, { tableColumns, formElements, rules, dataBase }) {
 		super(app);
 
 		this._tableColumns = tableColumns;
 		this._formElements = formElements;
 		this._rules = rules;
 		this._dataBase = dataBase;
-		
 	}
 
 	config() {
-		const saveBtn = { 
-			view:"button", 
-			value:"Add new", 
-			css:"webix_primary", 
+		const _ = this.app.getService("locale")._;
+
+		const localeTableColumns = this._tableColumns.map((item) => {
+			return {...item, header:_(item.header)};
+		});
+		const localeFormElements = this._formElements.map((item) => {
+			return {...item, label:_(item.label)};
+		});
+
+		const saveBtn = {
+			view: "button",
+			value: _("Add new"),
+			css: "webix_primary",
 			click: () => {
 				const form = this.$$("form");
-				
+
 				if (form.validate()) {
 					const item = form.getValues();
-					this.$$("table").add(item);
-					
+					this._dataBase.add(item);
+
 					form.clear();
 					webix.message("New record was added");
-				} 
-				
-			} 
+				}
+			},
 		};
 
 		const datatable = {
-			view:"datatable",
+			view: "datatable",
 			localId: "table",
 			editable: true,
 			rules: this._rules,
-			
-			columns: [...this._tableColumns, {
-				id: "del",
-				header: "",
-				template: "{common.trashIcon()}",
-				fillspace: 1,
-			} ],
-			
+
+			columns: [
+				...localeTableColumns,
+				{
+					id: "del",
+					header: "",
+					template: "{common.trashIcon()}",
+					fillspace: 1,
+				},
+			],
+
 			onClick: {
 				"wxi-trash": function (e, id) {
 					webix
@@ -51,15 +61,15 @@ export default class DataConstr extends JetView {
 							text: "Do you want delete this record?",
 						})
 						.then(() => {
-							this.remove(id);
+							this.$scope._dataBase.remove(id);
 						});
 				},
-			}
+			},
 		};
 
 		const form = {
-			view:"form",
-			localId: "form", 
+			view: "form",
+			localId: "form",
 			rules: this._rules,
 			elementsConfig: {
 				invalidMessage: "Enter the correct value!",
@@ -70,15 +80,11 @@ export default class DataConstr extends JetView {
 				},
 			},
 
-			elements:[
-				...this._formElements,
-				saveBtn,
-				{}
-			]
+			elements: [...localeFormElements, saveBtn, {}],
 		};
 
 		const ui = {
-			cols:[ datatable, form, ]
+			cols: [datatable, form],
 		};
 
 		return ui;

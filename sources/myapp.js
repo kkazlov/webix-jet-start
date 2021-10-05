@@ -1,5 +1,5 @@
 import "./styles/app.css";
-import {JetApp, EmptyRouter, HashRouter } from "webix-jet";
+import {JetApp, EmptyRouter, HashRouter, plugins } from "webix-jet";
 
 export default class MyApp extends JetApp{
 	constructor(config){
@@ -15,6 +15,12 @@ export default class MyApp extends JetApp{
 	}
 }
 
+const app = new MyApp();
+
 if (!BUILD_AS_MODULE){
-	webix.ready(() => new MyApp().render() );
+	webix.ready(() => {
+		app.render();
+		app.use(plugins.Locale);
+		
+	});
 }

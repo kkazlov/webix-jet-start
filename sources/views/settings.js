@@ -2,18 +2,31 @@ import { JetView } from "webix-jet";
 
 export default class Settings extends JetView {
 	config() {
+
+		const value = this.app.getService("locale").getLang();
+		
 		return {
 			rows: [
 				{
 					view: "segmented",
-					value: "RU",
+					name: "lang",
+					localId: "btns",
 					options: [
-						{ id: "RU", value: "RU" },
-						{ id: "EN", value: "EN" },
+						{ id: "en", value: "EN" },
+						{ id: "ru", value: "RU" },
 					],
+					value,
+					click: () => this.toggleLanguage()
+					
 				},
 				{},
 			],
 		};
+	}
+
+	toggleLanguage() {
+		const langs = this.app.getService("locale");
+		const value = this.getRoot().queryView({name: "lang"}).getValue();
+		langs.setLang(value);
 	}
 }
